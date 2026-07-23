@@ -3,7 +3,12 @@ class MoviesController < ApplicationController
 
   # GET /movies or /movies.json
   def index
-    @movies = Movie.all
+    @all_ratings = ["G", "PG", "PG-13", "R"]
+    @ratings_to_show = params.fetch(:ratings, {}).keys
+    if @ratings_to_show.empty?
+      @ratings_to_show = @all_ratings
+    end
+    @movies = Movie.with_ratings(@ratings_to_show)
   end
 
   # GET /movies/1 or /movies/1.json
